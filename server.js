@@ -18,21 +18,26 @@ server.get("/newgame", (req, res)=> {
         gameOver: false
     }
     activeSessions[newID] = newGame
-    console.log(activeSessions)
+    if(req.query.answer) {
+        activeSessions[newID].wordToGuess = req.query.answer
+    }
     res.status(201)
     res.send({sessionID: newID})
 })
 
 server.get("/gamestate", (req, res) => {
-    let gameState = {
-        guesses:[],
-        wrongLetters: [],
-        closeLetters: [], //'a' is no longer close because it has been guessed in the correct spot
-        rightLetters: [],
-        remainingGuesses: 6,
-    }
+    let currentSession = req.query.sessionID
+    let gameState = activeSessions[currentSession]
     res.status(200)
     res.send({gameState})
+})
+
+server.post("/guess", (req, res) => {
+    let prediction = req.body.guess
+    let currentSession = req.body.sessionID
+    let gameState = activeSessions[currentSession]
+    console.log(currentSession)
+    res.status(201)
 })
 //Do not remove this line. This allows the test suite to start
 //multiple instances of your server on different ports
