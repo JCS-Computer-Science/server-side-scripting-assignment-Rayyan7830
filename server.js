@@ -36,7 +36,16 @@ server.post("/guess", (req, res) => {
     let prediction = req.body.guess
     let currentSession = req.body.sessionID
     let gameState = activeSessions[currentSession]
-    console.log(currentSession)
+    let answerArr = prediction.split('')
+    let guessArr = []
+    for (let i = 0; i < 5; i++) {
+        let guessObj = {}
+        guessObj.value = answerArr[i]
+        guessObj.result = "RIGHT"
+        guessArr[i] = guessObj
+    }
+    gameState.guesses.push(guessArr)
+    console.log(answerArr)
     res.status(201)
 })
 //Do not remove this line. This allows the test suite to start
