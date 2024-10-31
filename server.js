@@ -36,6 +36,8 @@ server.post("/guess", (req, res) => {
     let prediction = req.body.guess
     let currentSession = req.body.sessionID
     let gameState = activeSessions[currentSession]
+    let answer = activeSessions[currentSession].wordToGuess
+    console.log(answer.split(''))
     let answerArr = prediction.split('')
     let guessArr = []
     for (let i = 0; i < 5; i++) {
@@ -44,9 +46,9 @@ server.post("/guess", (req, res) => {
         guessObj.result = "RIGHT"
         guessArr[i] = guessObj
     }
-    gameState.guesses.push(guessArr)
-    console.log(answerArr)
+    console.log(guessArr)
     res.status(201)
+    res.send()
 })
 //Do not remove this line. This allows the test suite to start
 //multiple instances of your server on different ports
