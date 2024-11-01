@@ -36,17 +36,24 @@ server.post("/guess", (req, res) => {
     let prediction = req.body.guess
     let currentSession = req.body.sessionID
     let gameState = activeSessions[currentSession]
-    let answer = activeSessions[currentSession].wordToGuess
-    console.log(answer.split(''))
-    let answerArr = prediction.split('')
+    let answerArr = gameState.wordToGuess.split('')
+    let predictionArr = prediction.split('')
     let guessArr = []
     for (let i = 0; i < 5; i++) {
         let guessObj = {}
-        guessObj.value = answerArr[i]
-        guessObj.result = "RIGHT"
+        guessObj.value = predictionArr[i]
+        for (let j = 0; j < 5; j++) {
+            if (predictionArr[i] == answerArr[j]) {
+                guessObj.result = "RIGHT"
+            } else {
+                guessObj.result = "WRONG"
+            }
+        }
         guessArr[i] = guessObj
     }
-    console.log(guessArr)
+    gameState.guesses.push(guessArr)
+    console.log(gameState.guesses)
+    console.log(gameState.wordToGuess.split(''))
     res.status(201)
     res.send()
 })
