@@ -44,19 +44,30 @@ server.post("/guess", (req, res) => {
         guessObj.value = predictionArr[i]
         for (let j = 0; j < 5; j++) {
             if (predictionArr[i] == answerArr[j]) {
-                guessObj.result = "RIGHT"
-            } else {
-                guessObj.result = "WRONG"
+                guessObj.result = "CLOSE"
+                gameState.closeLetters.push(predictionArr[i])
             }
+            if (predictionArr[i] == answerArr[i]) {
+                guessObj.result = "RIGHT"
+                gameState.rightLetters.push(predictionArr[i])
+            }
+        }
+        if (guessObj.result != "CLOSE" && guessObj.result != "RIGHT") {
+            guessObj.result = "WRONG"
+            gameState.wrongLetters.push(predictionArr[i])
         }
         guessArr[i] = guessObj
     }
-    gameState.guesses.push(guessArr)
-    console.log(gameState.guesses)
-    console.log(gameState.wordToGuess.split(''))
+    console.log(predictionArr)
+    console.log(guessArr)
+    console.log(answerArr)
+    gameState.guesses.push(predictionArr)
+    console.log(gameState)
     res.status(201)
-    res.send()
+    res.send({gameState})
 })
 //Do not remove this line. This allows the test suite to start
 //multiple instances of your server on different ports
+
 module.exports = server;
+
