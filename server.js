@@ -39,17 +39,20 @@ server.post("/guess", (req, res) => {
     let answerArr = gameState.wordToGuess.split('')
     let predictionArr = prediction.split('')
     let guessArr = []
+
     for (let i = 0; i < 5; i++) {
         let guessObj = {}
         guessObj.value = predictionArr[i]
+        if (predictionArr[i] == answerArr[i]) {
+            guessObj.result = "RIGHT"
+            gameState.rightLetters.push(predictionArr[i])
+            console.log("right")
+            console.log(i)
+        }
         for (let j = 0; j < 5; j++) {
-            if (predictionArr[i] == answerArr[j]) {
+            if (predictionArr[i] == answerArr[j] && predictionArr[i] != answerArr[i] && predictionArr[i] != gameState.closeLetters[j]) {
                 guessObj.result = "CLOSE"
                 gameState.closeLetters.push(predictionArr[i])
-            }
-            if (predictionArr[i] == answerArr[i]) {
-                guessObj.result = "RIGHT"
-                gameState.rightLetters.push(predictionArr[i])
             }
         }
         if (guessObj.result != "CLOSE" && guessObj.result != "RIGHT") {
@@ -58,9 +61,6 @@ server.post("/guess", (req, res) => {
         }
         guessArr[i] = guessObj
     }
-    console.log(predictionArr)
-    console.log(guessArr)
-    console.log(answerArr)
     gameState.guesses.push(predictionArr)
     console.log(gameState)
     res.status(201)
