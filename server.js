@@ -37,14 +37,13 @@ server.get("/gamestate", (req, res) => {
 server.post("/guess", (req, res) => {
     let prediction = req.body.guess
     let currentSession = req.body.sessionID
-    console.log(activeSessions)
-    console.log(currentSession)
+    console.log(Object.keys(activeSessions))
     let gameState = activeSessions[currentSession]
     if (!currentSession) {
         let error = "no session ID"
         res.status(400)
         res.send({error})
-    // } else if (currentSession != activeSessions) {
+    // } else if (for (let i = 0; != activeSessions.keys[i]) {
     //     let errorTwo = "session ID does not match"
     //     res.status(404)
     //     res.send([errorTwo])
