@@ -28,32 +28,34 @@ server.get("/newgame", (req, res)=> {
 
 server.get("/gamestate", (req, res) => {
     let currentSession = req.query.sessionID
-    console.log(currentSession)
     let gameState = activeSessions[currentSession]
     res.status(200)
     res.send({gameState})
 })
 
 server.post("/guess", (req, res) => {
+    for (let i = 0; i <5; i++) {
+        console.log("hi")
+    }
     let prediction = req.body.guess
     let currentSession = req.body.sessionID
     console.log(Object.keys(activeSessions))
     let gameState = activeSessions[currentSession]
-    if (!currentSession) {
-        let error = "no session ID"
-        res.status(400)
+if (!currentSession) {
+    let error = "no session ID"
+    res.status(400)
+    res.send({error}) }
+    else if (!gameState) {
+        let error = "session ID does not match"
+        res.status(404)
         res.send({error})
-    // } else if (for (let i = 0; != activeSessions.keys[i]) {
-    //     let errorTwo = "session ID does not match"
-    //     res.status(404)
-    //     res.send([errorTwo])
     } else {
         let answerArr = gameState.wordToGuess.split('')
         let predictionArr = prediction.split('')
-    let guessArr = []
+        let guessArr = []
     
-    for (let i = 0; i < 5; i++) {
-        let guessObj = {}
+        for (let i = 0; i < 5; i++) {
+            let guessObj = {}
         guessObj.value = predictionArr[i]
         if (predictionArr[i] == answerArr[i]) {
             guessObj.result = "RIGHT"
@@ -83,12 +85,12 @@ server.post("/guess", (req, res) => {
             i = 5
         }
     }
-        res.status(201)  
-        res.send({gameState})
-        }
+    res.status(201)  
+    res.send({gameState})
+}
     })
-//Do not remove this line. This allows the test suite to start
-//multiple instances of your server on different ports
-
+    //Do not remove this line. This allows the test suite to start
+    //multiple instances of your server on different ports
+    
 module.exports = server;
 
